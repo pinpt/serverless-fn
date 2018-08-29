@@ -18,9 +18,11 @@ const findFiles = (dir, files = [], re = /.*/) => {
   return files;
 };
 
-// exclude files that aren't useful when running inside lambda
+// exclude filename patterns that aren't useful when running inside lambda environment
 const excludePatterns = new RegExp('(' + [
   '\.bin\/',
+  '\.idea\/',
+  '\.github\/',
   'changelog',
   'readme',
   'examples',
@@ -34,6 +36,8 @@ const excludePatterns = new RegExp('(' + [
   '\.md$',
   '\.html$',
   '\.txt$',
+  '\.min\.js$', // browser based minified js
+  '_browser\.js$',
   'package-lock\.json$',
   'yarn\.lock$',
   'tsconfig\.json$',
@@ -44,7 +48,8 @@ const excludePatterns = new RegExp('(' + [
   'circleci',
   '\.npmignore$',
   'Makefile$',
-  'bower\.json$'
+  'bower\.json$',
+  'webpack\.config\.js$',
 ].join('|') + ')', 'i');
 
 
@@ -57,13 +62,11 @@ class ServerlessPlugin {
     this.options = options;
 
     this.hooks = {
-      // 'before:webpack:package:packExternalModules': this.package.bind(this),
-      // 'after:webpack:package:packExternalModules': this.package.bind(this),
-      'before:webpack:package:packageModules': this.package.bind(this),
+      'before:webpack:package:packageModules': this.package.bind(this)
     };
   }
 
-  async package(...args) {
+  async package() {
     const dir = path.join(process.cwd(), '.webpack');
     const files = findFiles(dir, [], /package\.json$/);
     await Promise.all(files.map(fn => {

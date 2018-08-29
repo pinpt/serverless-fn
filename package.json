@@ -1,0 +1,16 @@
+{
+  "name": "@pinpt/serverless-fn",
+  "version": "0.0.1",
+  "description": "Serverless plugin for Fn",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@github.com/pinpt/serverless-fn.git"
+  },
+  "author": "Pinpoint",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/pinpt/serverless-fn/issues"
+  },
+  "homepage": "https://github.com/pinpt/serverless-fn#readme"
+}

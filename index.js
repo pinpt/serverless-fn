@@ -4,17 +4,19 @@ const path = require('path');
 const exec = require('child_process').exec;
 
 const findFiles = (dir, files = [], re = /.*/) => {
-  fs.readdirSync(dir).forEach(fn => {
-    const f = path.join(dir, fn);
-    // console.log(f);
-    if (fs.statSync(f).isDirectory() && fn !== 'node_modules' && fn !== 'dependencies') {
-      findFiles(f, files, re);
-    } else {
-      if (re.test(f)) {
-        files.push(f);
+  if (fs.exists(dir)) {
+    fs.readdirSync(dir).forEach(fn => {
+      const f = path.join(dir, fn);
+      //console.log(fn);
+      if (fs.statSync(f).isDirectory() && fn !== 'node_modules' && fn !== 'dependencies') {
+        findFiles(f, files, re);
+      } else {
+        if (re.test(f)) {
+          files.push(f);
+        }
       }
-    }
-  });
+    });
+  }
   return files;
 };
 
